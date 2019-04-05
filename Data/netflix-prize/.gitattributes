@@ -1,0 +1,6 @@
+combined_data_1.txt.zip filter=lfs diff=lfs merge=lfs -text
+combined_data_2.txt.zip filter=lfs diff=lfs merge=lfs -text
+combined_data_3.txt.zip filter=lfs diff=lfs merge=lfs -text
+combined_data_4.txt.zip filter=lfs diff=lfs merge=lfs -text
+probe.txt.zip filter=lfs diff=lfs merge=lfs -text
+qualifying.txt.zip filter=lfs diff=lfs merge=lfs -text
