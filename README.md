@@ -7,7 +7,7 @@ This github repository is the final project deliverable for GroupX.
 ## Group Members
 | Full Name       | Email            |
 | --------------- | ---------------- |
-| Aaron Gauthier  | ???              |
+| Aaron Gauthier  | aaron_gauthier@gwu.edu              |
 | Pedro Uria      | ???              |
 | Zachary Buckley | zbuckley@gwu.edu |
 
