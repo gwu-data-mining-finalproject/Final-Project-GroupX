@@ -4,3 +4,7 @@ combined_data_3.txt.zip filter=lfs diff=lfs merge=lfs -text
 combined_data_4.txt.zip filter=lfs diff=lfs merge=lfs -text
 probe.txt.zip filter=lfs diff=lfs merge=lfs -text
 qualifying.txt.zip filter=lfs diff=lfs merge=lfs -text
+user_data_4.csv.zip filter=lfs diff=lfs merge=lfs -text
+user_data_1.csv.zip filter=lfs diff=lfs merge=lfs -text
+user_data_2.csv.zip filter=lfs diff=lfs merge=lfs -text
+user_data_3.csv.zip filter=lfs diff=lfs merge=lfs -text
