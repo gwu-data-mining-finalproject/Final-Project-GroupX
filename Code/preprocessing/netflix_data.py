@@ -7,9 +7,12 @@ def default_progress_handler(percentage):
 
 
 def decompress(data_dir, progress_handler=default_progress_handler):
-    files = os.listdir(data_dir)
+    netflix_path = os.path.join(data_dir, 'netflix-prize')
+    print('netflix path: ', netflix_path)
+    files = os.listdir(netflix_path)
     for i in range(0, len(files)):
-        if files[i].endswith('zip'):
-            with zipfile.ZipFile(data_dir + '/' + files[i], "r") as zip_ref:
-                zip_ref.extractall(data_dir)
-        progress_handler((i+1)/len(files)*100)
+        if files[i].endswith('zip') and files[i].startswith('combined'):
+            with zipfile.ZipFile(os.path.join(netflix_path, files[i]), "r") as zip_ref:
+                zip_ref.extractall(netflix_path)
+        progress_handler(int((i+1)/len(files)*100))
+    progress_handler(100)
