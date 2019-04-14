@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow
 class DEMO():
     def __init__(self, data_dir):
         self.data_dir = data_dir
+        self.df = None
         self.ui = Ui_MainWindow()
         self.mw = QMainWindow()
         self.ui.setupUi(self.mw)
