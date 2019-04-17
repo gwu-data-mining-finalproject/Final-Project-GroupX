@@ -42,7 +42,7 @@ print("Saving the clusters for each user with 0.04 distance thershold")
 clusters = {}
 keys = []
 for key, value in distances.items():
-    clusters[key] = " ".join([keyy for keyy, valuee in value.items() if valuee <= 0.04])
+    clusters[key] = " ".join([keyy for keyy, valuee in value.items() if float(valuee) <= 0.04])
     for i in keys:
         if key in clusters[i]:
             clusters[key] += " " + str(i)
