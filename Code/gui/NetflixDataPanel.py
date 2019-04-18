@@ -66,19 +66,23 @@ class NetflixDataPanel(object):
         print('nd load clicked')
         self.raw_loader = RawDataLoadThread(self.demo.data_dir)
         self.raw_loader.progressChanged.connect(self.nd_load_progress_handler)
+        self.raw_loader.resultReady.connect(self.nd_resultHandler)
         self.raw_loader.start()
+
+    def nd_resultHandler(self, result):
+        self.demo.df = result
 
     def nd_load_progress_handler(self, progress):
         self.demo.ui.loadProgressBar.setValue(progress)
         if progress == 100:
             self.demo.ui.LoadButton.setEnabled(False)
             self.demo.ui.reduceMoviesButton.setEnabled(True)
-            self.demo.df = self.raw_loader.df
 
     def nd_reduceMovies_clicked(self):
         print('nd reduceMovies clicked')
         self.reduceMoviesThread = MovieReducingThread(self.demo.df)
         self.reduceMoviesThread.progressChanged.connect(self.nd_reduceMovies_progress_handler)
+        self.reduceMoviesThread.resultReady.connect(self.nd_resultHandler)
         self.reduceMoviesThread.start()
 
     def nd_reduceMovies_progress_handler(self, progress):
@@ -86,12 +90,12 @@ class NetflixDataPanel(object):
         if progress == 100:
             self.demo.ui.reduceMoviesButton.setEnabled(False)
             self.demo.ui.reduceUsersButton.setEnabled(True)
-            self.demo.df = self.reduceMoviesThread.df
 
     def nd_reduceUsers_clicked(self):
         print('nd reduceUsers clicked')
         self.reduceUsersThread = UserReducingThread(self.demo.df)
         self.reduceUsersThread.progressChanged.connect(self.nd_reduceUsers_progress_handler)
+        self.reduceUsersThread.resultReady.connect(self.nd_resultHandler)
         self.reduceUsersThread.start()
 
     def nd_reduceUsers_progress_handler(self, progress):
@@ -99,13 +103,13 @@ class NetflixDataPanel(object):
         if progress == 100:
             self.demo.ui.reduceUsersButton.setEnabled(False)
             self.demo.ui.reduceSRSWRButton.setEnabled(True)
-            self.demo.df = self.reduceUsersThread.df
 
     def nd_SRSWR_clicked(self):
         print('nd srswr clicked')
         self.demo.ui.randomSeedSpinBox.setEnabled(False)
         self.srswrThread = SRSWRThread(self.demo.ui.randomSeedSpinBox.Value(), self.demo.df)
         self.srswrThread.progressChanged.connect(self.nd_SRSWR_progress_handler)
+        self.srswrThread.resultReady.connect(self.nd_resultHandler)
         self.srswrThread.start()
 
     def nd_SRSWR_progress_handler(self, progress):
@@ -113,7 +117,6 @@ class NetflixDataPanel(object):
         if progress == 100:
             self.demo.ui.reduceSRSWRButton.setEnabled(False)
             self.demo.ui.nd_saveButton.setEnabled(True)
-            self.demo.df = self.srswrThread.df
 
     def nd_save_clicked(self):
         print('nd save clicked')
@@ -152,6 +155,7 @@ class RawDataLoadThread(QThread):
     Runs the data load process
     """
     progressChanged = pyqtSignal(int)
+    resultReady = pyqtSignal(object)
 
     def __init__(self, data_dir):
         super().__init__()
@@ -160,6 +164,7 @@ class RawDataLoadThread(QThread):
 
     def run(self):
         self.df = load_from_txt(self.data_dir, progress_handler=self.progress_handler)
+        self.resultReady.emit(self.df)
 
     def progress_handler(self, num):
         self.progressChanged.emit(num)
@@ -169,14 +174,17 @@ class MovieReducingThread(QThread):
     Runs the reduction based on reviews per movie operation
     """
     progressChanged = pyqtSignal(int)
+    resultReady = pyqtSignal(object)
 
     def __init__(self, df):
         super().__init__()
         self.df = df
 
     def run(self):
+        print(self.df.head())
+        print(self.df.columns)
         tmp = self.df[['movie_id', 'rating']].groupby('movie_id').\
-            count().rename({'rating': 'count'}).sort_values('count')
+            count().rename(columns={'rating': 'count'}).sort_values('count')
         self.progress_handler(33)
         tmp = tmp[tmp.count > 214]
         self.progress_handler(66)
@@ -191,6 +199,7 @@ class UserReducingThread(QThread):
     Runs the reduction based on reviews per user operation
     """
     progressChanged = pyqtSignal(int)
+    resultReady = pyqtSignal(object)
 
     def __init__(self, df):
         super().__init__()
@@ -213,6 +222,7 @@ class SRSWRThread(QThread):
     Runs the SRSWR Operation
     """
     progressChanged = pyqtSignal(int)
+    resultReady = pyqtSignal(object)
 
     def __init__(self, random_state, df):
         super().__init__()
