@@ -4,7 +4,7 @@ import sys
 import os
 from PyQt5.QtWidgets import QApplication
 
-from gui.DEMO import DEMO
+from Code.gui.DEMO import DEMO
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
