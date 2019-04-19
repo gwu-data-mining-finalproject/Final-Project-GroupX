@@ -104,3 +104,9 @@ venv.bak/
 .mypy_cache/
 
 .DS_Store
+
+# decompressed files
+Data/netflix-prize/combined_data_*.txt
+
+# idea
+.idea
