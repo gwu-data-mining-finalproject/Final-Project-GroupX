@@ -2,6 +2,7 @@ from Code.preprocessing.netflix_data import decompress, load_from_txt
 from PyQt5.QtCore import QThread, pyqtSignal
 import os
 from sklearn.model_selection import train_test_split
+import pandas as pd
 
 class NetflixDataPanel(object):
     def __init__(self, demo):
@@ -27,10 +28,17 @@ class NetflixDataPanel(object):
             self.demo.ui.decompressProgressBar.setValue(100)
             self.demo.ui.decompressButton.setEnabled(False)
 
+    def checkPreviouslyDownsampled(self):
+        path = os.path.join(self.demo.data_dir, 'netflix-prize')
+        files = [os.path.basename(f) for f in os.listdir(path)]
+        if 'downsample.csv' in files:
+            self.demo.ui.nd_loadpreprocessed_Button.setEnabled(True)
+
     def nd_loadpreprocessed_clicked(self):
         print('nd loadpreprocessed clicked')
         self.loader = LoadThread(self.demo.data_dir)
         self.loader.progressChanged.connect(self.nd_loadpreprocessed_progress_handler)
+        self.loader.resultReady.connect(self.nd_resultHandler)
         self.loader.start()
 
     def nd_loadpreprocessed_progress_handler(self, progress):
@@ -107,7 +115,7 @@ class NetflixDataPanel(object):
     def nd_SRSWR_clicked(self):
         print('nd srswr clicked')
         self.demo.ui.randomSeedSpinBox.setEnabled(False)
-        self.srswrThread = SRSWRThread(self.demo.ui.randomSeedSpinBox.value, self.demo.df)
+        self.srswrThread = SRSWRThread(self.demo.ui.randomSeedSpinBox.value(), self.demo.df)
         self.srswrThread.progressChanged.connect(self.nd_SRSWR_progress_handler)
         self.srswrThread.resultReady.connect(self.nd_resultHandler)
         self.srswrThread.start()
@@ -233,8 +241,10 @@ class SRSWRThread(QThread):
         _, small_sample_of_users = train_test_split(self.df['user_id'].unique(),
                                                     test_size=0.005,
                                                     random_state=self.random_state)
+        print(small_sample_of_users.shape)
         self.progress_handler(50)
-        self.df = self.df[self.df.user_id.isin(small_sample_of_users)]
+        self.df = self.df[self.df['user_id'].isin(small_sample_of_users)]
+        print(self.df.shape)
         self.progress_handler(100)
 
     def progress_handler(self, num):
@@ -244,7 +254,7 @@ class SaveThread(QThread):
     """
     Saves the reduced DataFrame to disk
     """
-    progressChange = pyqtSignal(int)
+    progressChanged = pyqtSignal(int)
 
     def __init__(self, data_dir, df):
         super().__init__()
@@ -252,7 +262,7 @@ class SaveThread(QThread):
         self.df = df
 
     def run(self):
-        print('DD')
+        self.df.to_csv(os.path.join(self.data_dir, 'netflix-prize', 'downsampled.csv'), index=False)
         self.progress_handler(100)
 
     def progress_handler(self, num):
@@ -264,6 +274,7 @@ class LoadThread(QThread):
     Provides faster way around re-reducing data each time.
     """
     progressChanged = pyqtSignal(int)
+    resultReady = pyqtSignal(object)
 
     def __init__(self, data_dir):
         super().__init__()
@@ -271,8 +282,9 @@ class LoadThread(QThread):
         self.df = None
 
     def run(self):
-        print('EE')
+        self.df = pd.read_csv(os.path.join(self.data_dir, 'netflix-prize', 'downsampled.csv'))
         self.progress_handler(100)
+        self.resultReady.emit(self.df)
 
     def progress_handler(self, num):
         self.progressChanged.emit(num)
