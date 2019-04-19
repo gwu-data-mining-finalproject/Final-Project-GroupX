@@ -8,5 +8,5 @@ from Code.gui.DEMO import DEMO
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    demo = DEMO('/home/zbuckley/Dropbox/DataMining/Final-Project-GroupX/Data')
+    demo = DEMO('Data')
     sys.exit(app.exec_())

@@ -1,3 +1,8 @@
+
+
+
+# All the code in its entirety - I am now going to try to break it down into more useful chunks.
+
 import os
 import operator
 import pandas as pd
