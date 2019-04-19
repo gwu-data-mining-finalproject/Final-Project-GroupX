@@ -107,7 +107,7 @@ class NetflixDataPanel(object):
     def nd_SRSWR_clicked(self):
         print('nd srswr clicked')
         self.demo.ui.randomSeedSpinBox.setEnabled(False)
-        self.srswrThread = SRSWRThread(self.demo.ui.randomSeedSpinBox.Value(), self.demo.df)
+        self.srswrThread = SRSWRThread(self.demo.ui.randomSeedSpinBox.value, self.demo.df)
         self.srswrThread.progressChanged.connect(self.nd_SRSWR_progress_handler)
         self.srswrThread.resultReady.connect(self.nd_resultHandler)
         self.srswrThread.start()
@@ -186,9 +186,9 @@ class MovieReducingThread(QThread):
         tmp = self.df[['movie_id', 'rating']].groupby('movie_id').\
             count().rename(columns={'rating': 'count'}).sort_values('count')
         self.progress_handler(33)
-        tmp = tmp[tmp.count > 214]
+        tmp = tmp[tmp['count'] > 214]
         self.progress_handler(66)
-        self.df = self.df[self.df.movie_id.isin(tmp.movie_id)]
+        self.df = self.df[self.df.movie_id.isin(tmp.index)]
         self.progress_handler(100)
 
     def progress_handler(self, num):
@@ -207,11 +207,11 @@ class UserReducingThread(QThread):
 
     def run(self):
         tmp = self.df[['user_id', 'rating']].groupby('user_id').\
-            count().rename({'rating': 'count'}).sort_values('count')
+            count().rename(columns={'rating': 'count'}).sort_values('count')
         self.progress_handler(33)
-        tmp = tmp[tmp.count > 30]
+        tmp = tmp[tmp['count'] > 30]
         self.progress_handler(66)
-        self.df = self.df[self.df.user_id.isin(tmp.user_id)]
+        self.df = self.df[self.df.user_id.isin(tmp.index)]
         self.progress_handler(100)
 
     def progress_handler(self, num):
