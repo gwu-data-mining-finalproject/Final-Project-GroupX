@@ -6,11 +6,25 @@ import scipy.sparse as sp
 import array
 import time
 
+
+## Goal here was to read ratings/movie data into a sparse matrix
+## This file didn't end up getting used as we decided to go with the dataframe
+## approach, since it was more familiar to us.
+
+## Implementation uses similar optimization techniques as those in
+## netflix_data.py in Code.preprocessing.
+## (attempting this below is where i found/learned that technique)
 def default_progress_handler(percentage):
     print('processing text: ' + str(percentage))
 
 
 class UserIDMap(object):
+    """
+    Class responsible for dealing netflix user id to internal user id mapping
+    This was necessary to 'pack' the sparse matrix more densely, as the range
+    of the netflix user ids is 1 to 2649429 and there are only 480189 users in
+    the combined data files.
+    """
     def __init__(self):
         self.nuid_to_iuid = {}
         self.iuid_to_nuid = {}
@@ -30,6 +44,16 @@ class UserIDMap(object):
 # borrowed from: https://maciejkula.github.io/2015/02/22/incremental-construction-of-sparse-matrices/
 #  to avoid inefficiencies in sparse matrix libraries
 class IncrementalCOOMatrix(object):
+    """
+    This Class is responsible for aggregating the user rating data into c-arrays
+    c-arrays are much more efficient for this task than incrementally appending
+    each row of data to the dataframe, and using them drastically speeds up this
+    operation, though i do any strict timing tests during development. The problem
+    is that each append operation creates new dataframe objects, and performs copies
+    on some if not all of the data in the dataframe. the c-array function is optimized
+    to expand it's container size less frequently, and doesn't have as much overhead
+    from object creation operations.
+    """
 
     def __init__(self, shape, dtype):
 
@@ -80,6 +104,14 @@ class IncrementalCOOMatrix(object):
         return len(self.data)
 
 def process_to_numpy_matrix(idmap = UserIDMap(), progress_handler=default_progress_handler):
+    """
+    This function is used to process the data files into a sparse matrix
+    The function should likely be expanded to take in a data_dir similar to functions in
+    netflix_data.py, but this was sufficient for testing out the concept.
+    :param idmap: useridmap... allows for previously constructed useridmap to be reused
+    :param progress_handler: function for enabling progress-bar interactions/printouts occur by default
+    :return: sparse matrix
+    """
     start = time.time()
     path = '/home/zbuckley/Dropbox/DataMining/Final-Project-GroupX/Data/netflix-prize'
     # initialize sparse scipy matrix

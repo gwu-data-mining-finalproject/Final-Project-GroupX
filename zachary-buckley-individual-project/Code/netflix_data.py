@@ -1,17 +1,44 @@
 import os
+import zipfile
 import pandas as pd
 import numpy as np
 import array
-import time
 
-
+## written by me to support gui decompress operation
 def default_progress_handler(percentage):
-    print('processing text: ' + str(percentage))
+    """
+    function for printing out progress
+    :param percentage: percent complete
+    """
+    print('decompressing files: ' + str(percentage))
+
+## written by me to support gui decompress operation
+def decompress(data_dir, progress_handler=default_progress_handler):
+    """
+    function for decompressing the zip files provided by kaggle for the
+    netflix prize combined datasets
+    :param data_dir: path to the Data directory
+    :param progress_handler: function for printing/tracking progress (supports gui integration)
+    """
+    netflix_path = os.path.join(data_dir, 'netflix-prize')
+    print('netflix path: ', netflix_path)
+    files = os.listdir(netflix_path)
+    for i in range(0, len(files)):
+        if files[i].endswith('zip') and files[i].startswith('combined'):
+            with zipfile.ZipFile(os.path.join(netflix_path, files[i]), "r") as zip_ref:
+                zip_ref.extractall(netflix_path)
+        progress_handler(int((i+1)/len(files)*100))
+    progress_handler(100)
 
 # borrowed from: https://maciejkula.github.io/2015/02/22/incremental-construction-of-sparse-matrices/
 #  to avoid inefficiencies in sparse matrix libraries
 #  modified heavily to apply to creating dataframes instead.
+#  applied similar techniques for faster operations in a number of places
 class IncrementalDataFrame(object):
+    """
+    Class that supports the aggregation of movie_id, user_id, rating data
+    more quickly than incrementally building a dataframe row by row.
+    """
 
     def __init__(self):
 
@@ -31,8 +58,8 @@ class IncrementalDataFrame(object):
         #self.date.append(d)
 
     def todf(self):
-        movie_ids = np.frombuffer(self.ratings, dtype=np.int32)
-        user_ids = np.frombuffer(self.ratings, dtype=np.int32)
+        movie_ids = np.frombuffer(self.movie_ids, dtype=np.int32)
+        user_ids = np.frombuffer(self.user_ids, dtype=np.int32)
         ratings = np.frombuffer(self.ratings, dtype=np.int32)
 
         return pd.DataFrame({
@@ -45,18 +72,19 @@ class IncrementalDataFrame(object):
 
         return len(self.data)
 
-
-def load_from_csv(data_dir, progress_handler=default_progress_handler):
+## original algorithm written by Pedro (see txt_to_csv.py), then subsequently
+## optimized/modified by me based on stackoverflow posts
+def load_from_txt(data_dir, progress_handler=default_progress_handler):
     """
     Function to load single dataframe for txt contents of netflix data
     :param data_dir: path to the Data directory
     :param progress_handler: function responsible for feeding progress updates back to gui
-    :return: pandas dataframe containing all netflix data
+    :return: pandas dataframe containing all netflix data (except ratings dates)
     """
     path = os.path.join(data_dir, "netflix-prize")
     acc = IncrementalDataFrame()
     num_movies = 17770
-    num_users = 480189
+    #num_users = 480189
     progress_step = int(num_movies*0.01)
     movie_count = 0
     for fl in ["combined_data_1.txt", "combined_data_2.txt", "combined_data_3.txt", "combined_data_4.txt"]:
@@ -78,15 +106,3 @@ def load_from_csv(data_dir, progress_handler=default_progress_handler):
     progress_handler(100)
 
     return acc.todf()
-
-
-if __name__ == "__main__":
-    start = time.time()
-    acc = load_from_csv('/home/zbuckley/Dropbox/DataMining/Final-Project-GroupX/Data')
-    stop = time.time()
-    print('incremental df load time: ', stop-start)
-    start = time.time()
-    df = acc.todf()
-    stop = time.time()
-    print('conver to df time: ', stop-start)
-    print(df.head())
