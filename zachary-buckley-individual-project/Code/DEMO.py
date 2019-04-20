@@ -3,12 +3,7 @@ from .NetflixDataPanel import NetflixDataPanel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow
 
-
 class DEMO():
-    """
-    This class is responsible for being the 'root' of the collection of
-    objects being manipulated at runtime by gui operations
-    """
     def __init__(self, data_dir):
         self.data_dir = data_dir
         self.df = None

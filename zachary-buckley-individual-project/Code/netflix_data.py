@@ -72,7 +72,7 @@ class IncrementalDataFrame(object):
 
         return len(self.data)
 
-## original algorithm written by Pedro, then subsequenctly
+## original algorithm written by Pedro (see txt_to_csv.py), then subsequently
 ## optimized/modified by me based on stackoverflow posts
 def load_from_txt(data_dir, progress_handler=default_progress_handler):
     """
