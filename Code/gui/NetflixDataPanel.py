@@ -4,6 +4,7 @@ import os
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
+
 class NetflixDataPanel(object):
     def __init__(self, demo):
         self.demo = demo
@@ -140,7 +141,6 @@ class NetflixDataPanel(object):
             self.demo.ui.nd_loadpreprocessed_ProgressBar.setValue(100)
 
 
-
 class DecompressionThread(QThread):
     """
     Runs the decompression process
@@ -157,6 +157,7 @@ class DecompressionThread(QThread):
 
     def progress_handler(self, num):
         self.progressChanged.emit(num)
+
 
 class RawDataLoadThread(QThread):
     """
@@ -176,6 +177,7 @@ class RawDataLoadThread(QThread):
 
     def progress_handler(self, num):
         self.progressChanged.emit(num)
+
 
 class MovieReducingThread(QThread):
     """
@@ -202,6 +204,7 @@ class MovieReducingThread(QThread):
     def progress_handler(self, num):
         self.progressChanged.emit(num)
 
+
 class UserReducingThread(QThread):
     """
     Runs the reduction based on reviews per user operation
@@ -224,6 +227,7 @@ class UserReducingThread(QThread):
 
     def progress_handler(self, num):
         self.progressChanged.emit(num)
+
 
 class SRSWRThread(QThread):
     """
@@ -254,6 +258,7 @@ class SRSWRThread(QThread):
     def progress_handler(self, num):
         self.progressChanged.emit(num)
 
+
 class SaveThread(QThread):
     """
     Saves the reduced DataFrame to disk
@@ -271,6 +276,7 @@ class SaveThread(QThread):
 
     def progress_handler(self, num):
         self.progressChanged.emit(num)
+
 
 class LoadThread(QThread):
     """
