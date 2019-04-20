@@ -4,13 +4,13 @@ import os
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
+## This is a snapshot of NetflixDataPanelCode as I was originally figuring out the pattern to use for
+## progress bar and separate threads
 
+## Thread objects each have 2 QT Signals:
+##   - resultReady: used to pass finished df updates back to the main thread
+##   - progressChanged: used to pass incremental process updates back to gui's progress bars
 class NetflixDataPanel(object):
-    """
-    This Class is responsible for handling the NetflixDataPanel interactions
-    Ultimately it will update the Demo.df object to contain the downsampled
-    dataset we'll be using throughout the other panels in the gui
-    """
     def __init__(self, demo):
         self.demo = demo
         self.initListeners()
@@ -145,7 +145,7 @@ class NetflixDataPanel(object):
             self.demo.ui.nd_loadpreprocessed_Button.setEnabled(False)
             self.demo.ui.nd_loadpreprocessed_ProgressBar.setValue(100)
 
-
+# based on decompress routing in netflix_data.py written by me
 class DecompressionThread(QThread):
     """
     Runs the decompression process
@@ -163,7 +163,7 @@ class DecompressionThread(QThread):
     def progress_handler(self, num):
         self.progressChanged.emit(num)
 
-
+# based on optimized (by me) version of parsing code Pedro originally wrote
 class RawDataLoadThread(QThread):
     """
     Runs the data load process
@@ -183,7 +183,7 @@ class RawDataLoadThread(QThread):
     def progress_handler(self, num):
         self.progressChanged.emit(num)
 
-
+# Movie reducing thread based on early code Pedro wrote in downsample.py
 class MovieReducingThread(QThread):
     """
     Runs the reduction based on reviews per movie operation
@@ -209,7 +209,7 @@ class MovieReducingThread(QThread):
     def progress_handler(self, num):
         self.progressChanged.emit(num)
 
-
+## User reducing thread base on early code Pedro wrote in downsample.py
 class UserReducingThread(QThread):
     """
     Runs the reduction based on reviews per user operation
@@ -233,7 +233,7 @@ class UserReducingThread(QThread):
     def progress_handler(self, num):
         self.progressChanged.emit(num)
 
-
+## Thread object created based on early SRSWR code Pedro wrote in downsample.py
 class SRSWRThread(QThread):
     """
     Runs the SRSWR Operation

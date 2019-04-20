@@ -109,4 +109,4 @@ venv.bak/
 Data/netflix-prize/combined_data_*.txt
 
 # idea
-.idea
+.idea/
