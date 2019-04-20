@@ -258,7 +258,7 @@ class SaveThread(QThread):
             os.path.join(
                 self.data_dir,
                 'netflix-prize',
-                'downsampled-csv'
+                'downsampled-csv',
                 'few_samples.csv'),
             index=False)
         self.progress_handler(100)
