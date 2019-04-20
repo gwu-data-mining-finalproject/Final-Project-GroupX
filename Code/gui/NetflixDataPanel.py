@@ -30,6 +30,7 @@ class NetflixDataPanel(object):
 
     def nd_decompress_clicked(self):
         print('nd decompress clicked')
+        self.demo.ui.decompressButton.setEnabled(False)
         self.decompresser = DecompressionThread(self.demo.data_dir)
         self.decompresser.progressChanged.connect(
             self.nd_decompress_progress_handler)
@@ -43,6 +44,7 @@ class NetflixDataPanel(object):
 
     def nd_load_clicked(self):
         print('nd load clicked')
+        self.demo.ui.LoadButton.setEnabled(False)
         self.raw_loader = RawDataLoadThread(self.demo.data_dir)
         self.raw_loader.progressChanged.connect(self.nd_load_progress_handler)
         self.raw_loader.resultReady.connect(self.nd_resultHandler)
@@ -59,6 +61,7 @@ class NetflixDataPanel(object):
 
     def nd_reduceMovies_clicked(self):
         print('nd reduceMovies clicked')
+        self.demo.ui.reduceMoviesButton.setEnabled(False)
         self.reduceMoviesThread = MovieReducingThread(
             self.demo.df,
             self.demo.ui.nd_movieRatingsCuttoffSpinBox.value())
@@ -75,6 +78,7 @@ class NetflixDataPanel(object):
 
     def nd_reduceUsers_clicked(self):
         print('nd reduceUsers clicked')
+        self.demo.ui.reduceUsersButton.setEnabled(False)
         self.reduceUsersThread = UserReducingThread(
             self.demo.df,
             self.demo.ui.nd_userRatingsCutoffSpinBox.value())
@@ -91,6 +95,7 @@ class NetflixDataPanel(object):
 
     def nd_SRSWR_clicked(self):
         print('nd srswr clicked')
+        self.demo.ui.reduceSRSWRButton.setEnabled(False)
         self.demo.ui.randomSeedSpinBox.setEnabled(False)
         self.srswrThread = SRSWRThread(
             self.demo.ui.randomSeedSpinBox.value(),
@@ -107,6 +112,7 @@ class NetflixDataPanel(object):
 
     def nd_save_clicked(self):
         print('nd save clicked')
+        self.demo.ui.nd_saveButton.setEnabled(False)
         self.saveThread = SaveThread(self.demo.data_dir, self.demo.df)
         self.saveThread.progressChanged.connect(self.nd_save_progress_handler)
         self.saveThread.start()
