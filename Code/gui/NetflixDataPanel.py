@@ -238,14 +238,18 @@ class SRSWRThread(QThread):
         self.df = df
 
     def run(self):
+        print(self.df['user_id'].unique().shape)
+        #print(self.df.shape)
         _, small_sample_of_users = train_test_split(self.df['user_id'].unique(),
                                                     test_size=0.005,
                                                     random_state=self.random_state)
+        print(self.df.shape)
         print(small_sample_of_users.shape)
         self.progress_handler(50)
         self.df = self.df[self.df['user_id'].isin(small_sample_of_users)]
         print(self.df.shape)
         self.progress_handler(100)
+        self.resultReady.emit(self.df)
 
     def progress_handler(self, num):
         self.progressChanged.emit(num)

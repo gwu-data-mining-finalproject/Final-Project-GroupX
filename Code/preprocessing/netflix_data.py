@@ -43,8 +43,8 @@ class IncrementalDataFrame(object):
         #self.date.append(d)
 
     def todf(self):
-        movie_ids = np.frombuffer(self.ratings, dtype=np.int32)
-        user_ids = np.frombuffer(self.ratings, dtype=np.int32)
+        movie_ids = np.frombuffer(self.movie_ids, dtype=np.int32)
+        user_ids = np.frombuffer(self.user_ids, dtype=np.int32)
         ratings = np.frombuffer(self.ratings, dtype=np.int32)
 
         return pd.DataFrame({
