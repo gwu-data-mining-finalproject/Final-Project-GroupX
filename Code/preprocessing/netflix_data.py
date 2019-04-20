@@ -90,7 +90,3 @@ def load_from_txt(data_dir, progress_handler=default_progress_handler):
     progress_handler(100)
 
     return acc.todf()
-
-def load_netflix_metadata(data_dir, progress_handler=default_progress_handler):
-    path = os.path.join(data_dir, "netflix-prize")
-    file = os.path.join(path, '')
