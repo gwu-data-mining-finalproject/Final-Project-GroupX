@@ -50,8 +50,8 @@ Create a pycharm project pointing at the 'Final-Project-GroupX' folder (root nod
 of the repository). Then configure the interpreter to meet the requirements
 described in the [Interpreter](Python Interpreter Environment) section above.
 
-Locate a file entitled `driver.py` located at the 'Final-Project-GroupX' folder
-level of the repository. This is the only code file not located inside a `*/Code`
+Locate a file entitled [driver.py](../driver.py) located at the 'Final-Project-GroupX' folder
+level of the repository. This is the only code file not located inside a Code
 folder, and is only used to launch the gui.
 
 Right click the file, and click `Run Driver`, which will have a green arrow next
@@ -121,18 +121,18 @@ This operation will reduce the dataset by applying SRSOR, using sklearns train_t
 
 #### Save
 
-Saves the reduced data from RAM into a csv formatted file, in `Data/netflix-prize/downsampled-csv/few_samples.csv`.
+Saves the reduced data from RAM into a csv formatted file, in [few_samples](../Data/netflix-prize/downsampled-csv/few_samples.csv).
 
 ## Preprocessing data
 
-Due to the massive size of our dataset (100,477,253 samples), we decided to trim it down substantially in order to be able to cluster the users and then run our models. First, we removed the movies and users with a small number of ratings, and then we took a random sample of the users, of size 0.5 %, ending up with 510,852 samples, saved in [few_samples](Data/netflix-prize/downsampled-csv/few_samples.csv). The code is in [downsample.py](preprocessing/downsample.py).This operation can be performed using
+Due to the massive size of our dataset (100,477,253 samples), we decided to trim it down substantially in order to be able to cluster the users and then run our models. First, we removed the movies and users with a small number of ratings, and then we took a random sample of the users, of size 0.5 %, ending up with 510,852 samples, saved in [few_samples](../Data/netflix-prize/downsampled-csv/few_samples.csv). The code is in [downsample.py](preprocessing/downsample.py).This operation can be performed using
 the GUI as described [above](Launch Graphical User Interface).
 
 After doing so, we clustered the users based on the following distance metric:
 
 $$ d(A, B) = \frac{1}{n\cdot5^2} \sum_i (r_{A_i} - r_{B_i})^2 $$
 
-where $r_{Ai}$ is the rating of user $A$ to movie $i$, and $n$ is the number of movies both users $A$ and $B$ have rated. After computing the distance between each user, which took one and a half hours, we assigned to the same cluster all $B_j$ such as $d(A, B_j) \leq 0.04$, meaning that on average, the ratings of $A$ and $B_j$ for each common movie are within a unit distace. For example, $r_{A_i} = 5$ and $r_{B_{j_i}} = 4$. All the distances were saved in json format in [user_distances](Data/user-clusters/user_distances/), in case we want to change the threshold later on. The clusters were also saved in json format in [clusters.json](Data/user-clusters/clusters.json). The code is located in [get_similar_users.py](user-data-preprocessing/get_similar_users.py). Note that a regular clustering approach like KMeans was not possible, because we would need data in the format
+where $r_{Ai}$ is the rating of user $A$ to movie $i$, and $n$ is the number of movies both users $A$ and $B$ have rated. After computing the distance between each user, which took one and a half hours, we assigned to the same cluster all $B_j$ such as $d(A, B_j) \leq 0.04$, meaning that on average, the ratings of $A$ and $B_j$ for each common movie are within a unit distace. For example, $r_{A_i} = 5$ and $r_{B_{j_i}} = 4$. All the distances were saved in json format in [user_distances](../Data/user-clusters/user_distances/), in case we want to change the threshold later on. The clusters were also saved in json format in [clusters.json](../Data/user-clusters/clusters.json). The code is located in [get_similar_users.py](user-data-preprocessing/get_similar_users.py). Note that a regular clustering approach like KMeans was not possible, because we would need data in the format
 
 | `users` | `movie_1` | `movie_2` | `movie_3` | .... |
 |-------|---------|---------|---------|------|
@@ -142,7 +142,7 @@ where $r_{Ai}$ is the rating of user $A$ to movie $i$, and $n$ is the number of 
 
 and this would result in lots of missing values. Thus, perhaps clustering is not the most appropriate way of referring to this process, and that's why the name of the script does not allude to such term.
 
-With the info in [clusters.json](Data/user-clusters/clusters.json), a dataset like
+With the info in [clusters.json](../Data/user-clusters/clusters.json), a dataset like
 
 |   movie   |`cluster_avg_rt` | `user_A_rt`|
 |-----------|-----------------|------------|
