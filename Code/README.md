@@ -108,16 +108,16 @@ This operation will parse, and load the netflix rating data into Random Access M
 
 This operation will reduce the data loaded into RAM, using the specified
 cutoff value as the minimum required number of ratings for a movie to stay in the
-dataset.
+dataset. The responsible for this operation is located [here](preprocessing/downsample.py).
 
 #### Reduce Users
 
 This operation will reduce the data loaded into RAM, using the specified
-cutoff value as the minimum required number of ratings for a user to stay in the dataset.
+cutoff value as the minimum required number of ratings for a user to stay in the dataset. The responsible for this operation is located [here](preprocessing/downsample.py).
 
 #### Reduce SRSWR
 
-This operation will reduce the dataset by applying SRSOR, using sklearns train_test_split function, and the specified random_seed value, to select .5% of the users from the data in RAM. *NOTE: Despite the text in the GUI saying SRSWR, this operation is in fact performing Simple Random Selection Without Replacement (SRSOR).*
+This operation will reduce the dataset by applying SRSOR, using sklearns train_test_split function, and the specified random_seed value, to select .5% of the users from the data in RAM. The responsible for this operation is located [here](preprocessing/downsample.py). *NOTE: Despite the text in the GUI saying SRSWR, this operation is in fact performing Simple Random Selection Without Replacement (SRSOR).*
 
 #### Save
 
@@ -132,7 +132,7 @@ After doing so, we clustered the users based on the following distance metric:
 
 $$ d(A, B) = \frac{1}{n\cdot5^2} \sum_i (r_{A_i} - r_{B_i})^2 $$
 
-where $r_{Ai}$ is the rating of user $A$ to movie $i$, and $n$ is the number of movies both users $A$ and $B$ have rated. After computing the distance between each user, which took one and a half hours, we assigned to the same cluster all $B_j$ such as $d(A, B_j) \leq 0.04$, meaning that on average, the ratings of $A$ and $B_j$ for each common movie are within a unit distace. For example, $r_{A_i} = 5$ and $r_{B_{j_i}} = 4$. All the distances were saved in json format in [user_distances](../Data/user-clusters/user_distances/), in case we want to change the threshold later on. The clusters were also saved in json format in [clusters.json](../Data/user-clusters/clusters.json). The code is located in [get_similar_users.py](user-data-preprocessing/get_similar_users.py). Note that a regular clustering approach like KMeans was not possible, because we would need data in the format
+where $r_{Ai}$ is the rating of user $A$ to movie $i$, and $n$ is the number of movies both users $A$ and $B$ have rated. After computing the distance between each user, which took one and a half hours, we assigned to the same cluster all $B_j$ such as $d(A, B_j) \leq 0.04$, meaning that on average, the ratings of $A$ and $B_j$ for each common movie are within a unit distace. For example, $r_{A_i} = 5$ and $r_{B_{j_i}} = 4$. All the distances were saved in json format in [user_distances](../Data/user-clusters/user_distances/), in case we want to change the threshold later on. The clusters were also saved in json format in [clusters.json](../Data/user-clusters/clusters.json). The code is located in [get_similar_users.py](preprocessing/get_similar_users.py). Note that a regular clustering approach like KMeans was not possible, because we would need data in the format
 
 | `users` | `movie_1` | `movie_2` | `movie_3` | .... |
 |-------|---------|---------|---------|------|
