@@ -163,6 +163,7 @@ class RawDataLoadThread(QThread):
         self.df = load_from_txt(
             self.data_dir,
             progress_handler=self.progress_handler)
+        print('resulting df shape:', self.df.shape)
         self.progress_handler(100)
         self.resultReady.emit(self.df)
 
@@ -187,6 +188,7 @@ class MovieReducingThread(QThread):
             self.df,
             self.ratings_cutoff,
             progress_handler=self.progress_handler)
+        print('resulting df shape:', self.df.shape)
         self.progress_handler(100)
         self.resultReady.emit(self.df)
 
@@ -211,6 +213,7 @@ class UserReducingThread(QThread):
             self.df,
             self.ratings_cutoff,
             progress_handler=self.progress_handler)
+        print('resulting df shape:', self.df.shape)
         self.progress_handler(100)
         self.resultReady.emit(self.df)
 
@@ -235,6 +238,7 @@ class SRSWRThread(QThread):
             self.df,
             self.random_state,
             progress_handler=self.progress_handler)
+        print('resulting df shape:', self.df.shape)
         self.progress_handler(100)
         self.resultReady.emit(self.df)
 
