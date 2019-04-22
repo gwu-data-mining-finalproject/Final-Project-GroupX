@@ -130,9 +130,9 @@ the GUI as described [above](Launch Graphical User Interface).
 
 After doing so, we clustered the users based on the following distance metric:
 
-$$ d(A, B) = \frac{1}{n\cdot5^2} \sum_i (r_{A_i} - r_{B_i})^2 $$
+![m](https://i.imgur.com/JPTG1DD.png)
 
-where $r_{Ai}$ is the rating of user $A$ to movie $i$, and $n$ is the number of movies both users $A$ and $B$ have rated. After computing the distance between each user, which took one and a half hours, we assigned to the same cluster all $B_j$ such as $d(A, B_j) \leq 0.04$, meaning that on average, the ratings of $A$ and $B_j$ for each common movie are within a unit distace. For example, $r_{A_i} = 5$ and $r_{B_{j_i}} = 4$. All the distances were saved in json format in [user_distances](../Data/user-clusters/user_distances/), in case we want to change the threshold later on. The clusters were also saved in json format in [clusters.json](../Data/user-clusters/clusters.json). The code is located in [get_similar_users.py](preprocessing/get_similar_users.py). Note that a regular clustering approach like KMeans was not possible, because we would need data in the format
+where `rA_i` is the rating of user `A` to movie `i`, and `n` is the number of movies both users `A` and `B` have rated. After computing the distance between each user, which took one and a half hours, we assigned to the same cluster all `B_j` such as `d(A, B_j) = 0.02`, meaning that on average, the ratings of `A` and `B_j` for each common movie are within a 0.7 units of distance. For example, `rA_i = 5` and `rB_ji = 4.3`. All the distances were saved in json format in [user_distances](../Data/user-clusters/user_distances/), in case we want to change the threshold later on. The clusters were also saved in json format in [clusters.json](../Data/user-clusters/clusters.json). The code is located in [get\_similar\_users.py](preprocessing/get_similar_users.py). Note that a regular clustering approach like KMeans was not possible, because we would need data in the format
 
 | `users` | `movie_1` | `movie_2` | `movie_3` | .... |
 |-------|---------|---------|---------|------|
@@ -144,10 +144,10 @@ and this would result in lots of missing values. Thus, perhaps clustering is not
 
 With the info in [clusters.json](../Data/user-clusters/clusters.json), a dataset like
 
-|   movie   |`cluster_avg_rt` | `user_A_rt`|
+|   movie   |`cluster_avg_rt` | `userA_rt`|
 |-----------|-----------------|------------|
 | `movie_1` |                 |            |
 | `movie_2` |                 |            |
 | ...       | ...             | ...        |
 
-can be obtained for each user `A`, and then a supervised learning model can be trained to predict the ratings of each user on new movies. The target would be `user_A_rt`, for which we will know ratings for the movies the user has rated, together with the average rating of the user's cluster for all movies.
+can be obtained for each user `A`, and then a supervised learning model can be trained to predict the ratings of each user on new movies. The target would be `userA_rt`, for which we will know ratings for the movies the user has rated, together with the average rating of the user's cluster for all movies.
