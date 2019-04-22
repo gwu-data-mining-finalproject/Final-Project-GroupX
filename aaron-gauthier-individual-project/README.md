@@ -8,7 +8,7 @@ GUI Code
 
 For the collaborative filtering (correlation) portion, I developed a simple algorithm utilizing correlation based on the mean movie ratings aggregated by movie. The latest versions of these files, as they exist in the Group Project, can be found here:
 
-    Demo.ui
+    [text-to-show](Demo.ui)
     genGUICode
     generated_gui.py
     driver.py
