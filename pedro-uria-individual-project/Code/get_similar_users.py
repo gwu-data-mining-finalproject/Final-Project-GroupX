@@ -32,17 +32,17 @@ print("This process took", round((time.time() - start)/3600, 2), "hours")  # 1.3
 
 # Saves the distances as a json: {user_a: {user_b: d_a_b, user_c: d_a_c, ...}}
 print("Saving the user distances in json format")
-path = os.getcwd()[:os.getcwd().find("Code")] + "Data/user-clusters/user_distances/user_"
+path = os.getcwd()[:os.getcwd().find("Code")] + "Data/user-clusters/user-distances/user_"
 for user in distances.keys():
     with open(path + str(user) + ".json", 'w') as fp:
         json.dump(distances[user], fp)
 
 # Saves the clusters as a json: {user_a: user_b user_e user_j ....}
-print("Saving the clusters for each user with 0.04 distance thershold")
+print("Saving the clusters for each user with 0.02 distance thershold")
 clusters = {}
 keys = []
 for key, value in distances.items():
-    clusters[key] = " ".join([keyy for keyy, valuee in value.items() if float(valuee) <= 0.04])
+    clusters[key] = " ".join([keyy for keyy, valuee in value.items() if float(valuee) <= 0.02])
     for i in keys:
         if key in clusters[i]:
             clusters[key] += " " + str(i)
