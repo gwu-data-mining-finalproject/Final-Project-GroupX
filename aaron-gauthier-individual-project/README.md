@@ -8,7 +8,7 @@ GUI Code
 
 For the collaborative filtering (correlation) portion, I developed a simple algorithm utilizing correlation based on the mean movie ratings aggregated by movie. The latest versions of these files, as they exist in the Group Project, can be found here:
 
-    [text-to-show](Demo.ui)
+    Demo.ui
     genGUICode
     generated_gui.py
     driver.py
@@ -20,11 +20,17 @@ The code file contains several iterations (prototypes) of various ideas on to ta
 
 
 collaborative_filtering.ipynb  - final code that was used for our collaborative filtering and project report / slides
+
 Recommender System Architectural Outline.pdf  - outline of how it should work / operate so that the GUI and other parts could be developed
+
 recommender system requirements.pdf  - assisted in the development of the architectural outline
+
 few_samples_netflix.csv  - used for the project data
+
 movie_titles.txt  - used for the project to join the titles to the rest of the project data
+
 export_data_netflix_movies.csv 
+
 export_data_netflix_rating_mean.csv
 
 
