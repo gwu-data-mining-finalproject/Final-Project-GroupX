@@ -154,4 +154,4 @@ can be obtained for each user `A`, and then a supervised learning model can be t
 
 ## Modeling
 
-Our code for this section is located in [models](models). [models.ipynb](models/models.ipynb) contains the regression approached for each user. [Recommender Engine - Data Mining Project - Reboot - Final- 21 April 2019.ipynb](models/Recommender Engine - Data Mining Project - Reboot - Final- 21 April 2019.ipynb) contains the Collaborative Filtering approach. A brief comparison between the two is located on [comparison.ipynb](models/comparison.ipynb). 
+Our code for this section is located in [models](models). [models.ipynb](models/models.ipynb) contains the regression approached for each user. [collaborative_filtering.ipynb](models/collaborative_filtering.ipynb) contains the Collaborative Filtering approach. A brief comparison between the two is located on [comparison.ipynb](models/comparison.ipynb). 
